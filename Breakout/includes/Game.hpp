@@ -8,6 +8,13 @@
 #include "Block.hpp"
 #include <iostream>
 
+/*
+template<class T>
+auto onResize = [] (T& shape, const sf::Vector2f& newSize, const float& widthRatio, const float& heightRatio) {
+    shape.setSize({newSize.x * widthRatio, newSize.y * heightRatio});
+};
+*/
+
 class Game {
 public:
     Game(const Game&) = delete;
@@ -15,18 +22,12 @@ public:
     
     Game();
     void run();
-    template<class T1>
-    void resize(T1& shape, const int& x, const int& y) const {
-        const sf::Vector2i scale {x/curSize.x, y/curSize.y};
-
-        std::cout << "X= " << scale.x << ", Y= " << scale.y << std::endl;
-    }
     
 private:
     bool processEvents();
     void update(const sf::Time& deltaTime);
     void render();
-
+    void init(const float& windowWidth, const float& windowHeight, const float& blockWidth, const float& blockHeight);
 
     sf::RenderWindow window;
 
@@ -35,6 +36,5 @@ private:
     Paddle paddle;
     std::vector<Block> blocks;
     sf::Vector2i curSize{WINDOW_WIDTH, WINDOW_HEIGHT};
-
 };
 #endif

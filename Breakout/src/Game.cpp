@@ -8,13 +8,11 @@ Game::Game() :
     window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),"Breakout"), ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2), paddle(WINDOW_WIDTH/2, WINDOW_HEIGHT-50) {
     
     window.setFramerateLimit(60);
-    window.setTitle("Breakout");
     
     for (int c{0}; c < BLOCK_COLUMNS; ++c)
         for (int r{0}; r < BLOCK_ROWS; ++r)
             blocks.emplace_back((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5));
 }
-
 
 void Game::run() {
     sf::Clock clock;
@@ -37,13 +35,14 @@ bool Game::processEvents() {
         }
 
         if (event.type == sf::Event::Resized) {
-            /*
-            window.setSize({event.size.width, event.size.height});
-            for (auto& block: blocks) {
-            }
-            paddle.shape.setScale({0, 0});
-            */
-            resize(ball, event.size.width, event.size.height);
+            // (T& shape, const sf::Vector2f& newSize, const float& widthRatio, const float& heightRatio)
+            // onResize(paddle.shape, {event.size.width, event.size.height}, PADDLE_RATIO_WIDTH, PADDLE_RATIO_HEIGHT);
+            paddle.resize(paddle.shape.getPosition().x, paddle.shape.getPosition().y, event.size.width * PADDLE_RATIO_WIDTH, event.size.height * PADDLE_RATIO_HEIGHT);
+            ball.resize(ball.shape.getPosition().x, ball.shape.getPosition().y, event.size.width * BALL_RATIO_RADIUS);
+            for (auto& block : blocks)
+                block.resize(block.shape.getPosition().x, block.shape.getPosition().y, event.size.width * BLOCK_RATIO_WIDTH, event.size.height * BLOCK_RATIO_HEIGHT);
+            
+            // (c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5)
         }
 
     }
@@ -51,7 +50,8 @@ bool Game::processEvents() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) return false;
     
     // game specific code
-    paddle.velocity.x = (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) ? -PADDLE_VELOCITY : (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) ? PADDLE_VELOCITY : 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) paddle.velocity.x = -PADDLE_VELOCITY;
+    else paddle.velocity.x =  (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) ? PADDLE_VELOCITY : 0;
 
     return true;
 }
