@@ -1,9 +1,11 @@
 #include "physics.hpp"
 
-#include <cmath>
+auto sqr = [] (const sf::Vector2f& p) {
+    return ((p.x*p.x)+(p.y*p.y));
+};
 
 void testCollision(const Paddle& paddle, Ball& ball) noexcept {
-    if (!isIntersecting(paddle, ball)) return;
+    if (!isIntersecting(ball.shape, paddle.shape)) return;
 
     ball.velocity.y = -BALL_VELOCITY;
     ball.velocity.x = (ball.x() < paddle.x()) ? -BALL_VELOCITY : BALL_VELOCITY;
@@ -12,7 +14,8 @@ void testCollision(const Paddle& paddle, Ball& ball) noexcept {
 
 void testCollision(Block& block, Ball& ball) noexcept {
 
-    if (!isIntersecting(block, ball)) return;
+    if (!isIntersecting(ball.shape, block.shape)) return;
+    
     block.destroyed = true;// !(--block.lives);
 
     float overlapLeft{ball.right() - block.left()};
@@ -28,4 +31,16 @@ void testCollision(Block& block, Ball& ball) noexcept {
 
     if (fabs(minOverlapX) < fabs(minOverlapY)) ball.velocity.x = ballFromLeft ? -BALL_VELOCITY : BALL_VELOCITY; 
     else ball.velocity.y = ballFromTop ? -BALL_VELOCITY : BALL_VELOCITY;
+}
+
+bool isIntersecting(const sf::CircleShape& circle, const sf::RectangleShape& rectangle) noexcept {
+    
+    sf::Vector2f distance{fabsf(circle.getPosition().x - rectangle.getPosition().x), fabsf(circle.getPosition().y - rectangle.getPosition().y)};
+    
+    if ((distance.x > (rectangle.getSize().x + circle.getRadius())) || (distance.y > (rectangle.getSize().y + circle.getRadius()))) return false;
+
+    if ((distance.x <= (rectangle.getSize().x/2)) || (distance.y <= (rectangle.getSize().y/2))) return true;
+
+    float disSqr = sqr({distance.x - rectangle.getSize().x/2, distance.y - rectangle.getSize().y/2});
+    return disSqr <= (circle.getRadius()*circle.getRadius());
 }

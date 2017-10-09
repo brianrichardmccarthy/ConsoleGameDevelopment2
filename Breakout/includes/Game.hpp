@@ -8,13 +8,6 @@
 #include "Block.hpp"
 #include <iostream>
 
-/*
-template<class T>
-auto onResize = [] (T& shape, const sf::Vector2f& newSize, const float& widthRatio, const float& heightRatio) {
-    shape.setSize({newSize.x * widthRatio, newSize.y * heightRatio});
-};
-*/
-
 class Game {
 public:
     Game(const Game&) = delete;
@@ -27,7 +20,6 @@ private:
     bool processEvents();
     void update(const sf::Time& deltaTime);
     void render();
-    void init(const float& windowWidth, const float& windowHeight, const float& blockWidth, const float& blockHeight);
 
     sf::RenderWindow window;
 
