@@ -1,7 +1,7 @@
 #include "Ball.hpp"
 #include <iostream>
 
-Ball::Ball(const float& x, const float& y) {
+Ball::Ball(const float& x, const float& y) : active(false) {
     resize(x, y);
 }
 
@@ -10,7 +10,6 @@ void Ball::update(const sf::Time& deltaTime) {
 
     velocity.x = (left() < 0) ? BALL_VELOCITY : (right() > WINDOW_WIDTH) ? -BALL_VELOCITY : velocity.x;
     velocity.y = (top() < 0) ? BALL_VELOCITY : (bottom() > WINDOW_HEIGHT) ? -BALL_VELOCITY : velocity.y;
-
 }
 
 void Ball::resize(const float& x, const float& y, const float& radius) {

@@ -24,9 +24,9 @@ private:
     sf::RenderWindow window;
 
     // game specific code
-    Ball ball;
+    int currentLevel{3};
     Paddle paddle;
     std::vector<Block> blocks;
-    sf::Vector2i curSize{WINDOW_WIDTH, WINDOW_HEIGHT};
+    std::vector<Ball> balls;
 };
 #endif
