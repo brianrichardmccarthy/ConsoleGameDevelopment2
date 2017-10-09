@@ -312,3 +312,6 @@ SFML_Setup/
 
 # sfml itself
 SFML-2.4.2/
+
+# some poor lads attemp at space invaders I had to do a code review for
+Space_Invaders_Complaints/
