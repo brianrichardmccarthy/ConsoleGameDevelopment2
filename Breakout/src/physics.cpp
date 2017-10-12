@@ -20,7 +20,7 @@ void testCollision(Block& block, Ball& ball) noexcept {
 
     if (!isIntersecting(ball.shape, block.shape)) return;
     
-    block.destroyed = ball.active;
+    block.destroyed = !(--block.currentLives);
 
     float overlapLeft{ball.right() - block.left()};
     float overlapRight{block.right() - ball.left()};

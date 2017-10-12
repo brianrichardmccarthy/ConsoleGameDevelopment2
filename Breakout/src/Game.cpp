@@ -17,7 +17,6 @@ auto randomBool = [] () {
 
 Game::Game() :
     window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),"Breakout"), paddle(WINDOW_WIDTH/2, WINDOW_HEIGHT-50) {
-    
     window.setFramerateLimit(60);
     srand(static_cast<unsigned int>(time(0)));
     init();
@@ -49,7 +48,10 @@ void Game::init(int currentLevel, const sf::Vector2u& size) {
             }
         case 4: {
                 // blocks have multiple lives that regenerate over time
-                break;
+                for (auto& block : blocks) {
+                    block.maxLives = 3;
+                    block.currentLives = 3;
+                }
             }
         case 5: {
                 // Bonus and traps
@@ -101,8 +103,11 @@ bool Game::processEvents() {
     // game specific code
     
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        paddle.automatic = !paddle.automatic;
-        paddle.velocity.x = (randomBool()) ? PADDLE_VELOCITY : -PADDLE_VELOCITY;
+        if (paddleTimer.getElapsedTime().asSeconds() > .5f) {
+            paddle.automatic = !paddle.automatic;
+            paddle.velocity.x = (randomBool()) ? PADDLE_VELOCITY : -PADDLE_VELOCITY;
+            paddleTimer.restart();
+        } 
     }
     
     if (!paddle.automatic)
@@ -131,6 +136,10 @@ void Game::update(const sf::Time& deltaTime) {
     for (auto& ball : balls)
         for (auto& block : blocks) testCollision(block, ball);
     
+    if (blocks.size())
+        if (blocks.front().maxLives > 1)
+            for (auto& block : blocks) block.update();
+
     blocks.erase(std::remove_if(blocks.begin(), blocks.end(), [] (const Block& block) {
         return block.destroyed;
     }), blocks.end());

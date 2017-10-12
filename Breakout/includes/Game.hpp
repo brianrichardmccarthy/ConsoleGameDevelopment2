@@ -27,5 +27,6 @@ private:
     Paddle paddle;
     std::vector<Block> blocks;
     std::vector<Ball> balls;
+    sf::Clock paddleTimer;
 };
 #endif

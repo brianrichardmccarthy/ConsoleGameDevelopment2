@@ -9,6 +9,37 @@ Block::Block(const float& x, const float& y) {
     windowSize = {static_cast<unsigned int>(WINDOW_WIDTH), static_cast<unsigned int>(WINDOW_HEIGHT)};
 }
 
+void Block::update() {
+    if (maxLives == 1) return;
+
+    if (timer.getElapsedTime().asSeconds() > maxElapsedTime) {
+        timer.restart();
+        if (currentLives < maxLives) currentLives++;
+    }
+    
+    switch (currentLives) {
+        case 1: {
+                shape.setFillColor(sf::Color::Red);
+                maxElapsedTime = {15.f};
+                break;
+            }
+        case 2: {
+                shape.setFillColor(sf::Color::Yellow);
+                maxElapsedTime = {10.f};
+                break;
+            }
+        case 3: {
+                shape.setFillColor(sf::Color::Green);
+                maxElapsedTime = {5.f};
+                break;
+            }
+        default:
+            break;
+    }
+
+
+}
+
 void Block::resize(const float& x, const float& y, const float& width, const float& height) {
     windowSize = {static_cast<unsigned int>(width), static_cast<unsigned int>(height)};
     shape.setPosition({width * positionRatio.x, height * positionRatio.y});
