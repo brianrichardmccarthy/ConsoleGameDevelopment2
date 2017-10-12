@@ -1,7 +1,23 @@
 #include "Paddle.hpp"
 
 Paddle::Paddle(const float& x, const float& y) : automatic(false) {
-    resize(x, y);
+    // windowSize = {static_cast<unsigned int>(WINDOW_WIDTH), static_cast<unsigned int>(WINDOW_HEIGHT)};
+    windowSize = {static_cast<unsigned int>(WINDOW_WIDTH), static_cast<unsigned int>(WINDOW_HEIGHT)};
+    
+    // positionRatio = {x/WINDOW_WIDTH, y/WINDOW_HEIGHT};
+    positionRatio = {x/WINDOW_WIDTH, y/WINDOW_HEIGHT};
+    
+    // shape.setPosition({x, y});
+    shape.setPosition({x, y});
+    
+    // shape.setFillColor(sf::Color::Green);
+    shape.setFillColor(sf::Color::Blue);
+    
+    // shape.setOrigin({BLOCK_WIDTH/2, BLOCK_HEIGHT/2});
+    shape.setOrigin({PADDLE_WIDTH/2, PADDLE_HEIGHT/2});
+    
+    // shape.setSize({BLOCK_WIDTH, BLOCK_HEIGHT});
+    shape.setSize({PADDLE_WIDTH, PADDLE_HEIGHT});
 }
 
 void Paddle::update(const sf::Time& deltaTime) {
@@ -9,16 +25,17 @@ void Paddle::update(const sf::Time& deltaTime) {
     
     if (!automatic) {
         if (left() < 0) shape.move(-left(), 0);
-        if (right() > WINDOW_WIDTH) shape.move(-right() + WINDOW_WIDTH, 0);
+        if (right() > windowSize.x) shape.move(-right() + windowSize.x, 0);
     } else {
         if (left() < 0) velocity.x = PADDLE_VELOCITY;
-        else if (right() > WINDOW_WIDTH) velocity.x = -PADDLE_VELOCITY;
+        else if (right() > windowSize.x) velocity.x = -PADDLE_VELOCITY;
     }
 }
 
 void Paddle::resize(const float& x, const float& y, const float& width, const float& height) {
-    shape.setPosition({x, y});
-    shape.setSize({width, height});
+    windowSize = {static_cast<unsigned int>(width), static_cast<unsigned int>(height)};
+    shape.setPosition({width * positionRatio.x, height * positionRatio.y});
+    shape.setSize({width * PADDLE_RATIO_WIDTH, height * PADDLE_RATIO_HEIGHT});
+    shape.setOrigin({(width * PADDLE_RATIO_WIDTH)/2, (height * PADDLE_RATIO_HEIGHT)/2});
     shape.setFillColor(sf::Color::Blue);
-    shape.setOrigin({width/2, height/2});
 }

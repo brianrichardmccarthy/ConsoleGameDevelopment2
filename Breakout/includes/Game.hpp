@@ -20,11 +20,11 @@ private:
     bool processEvents();
     void update(const sf::Time& deltaTime);
     void render();
+    // void init(int currentLevel, const sf::Vector2u& size = sf::Vector2u{static_cast<unsigned int>(WINDOW_WIDTH), static_cast<unsigned int>(WINDOW_HEIGHT)});
 
     sf::RenderWindow window;
 
     // game specific code
-    int currentLevel{3};
     Paddle paddle;
     std::vector<Block> blocks;
     std::vector<Ball> balls;

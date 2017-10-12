@@ -8,7 +8,7 @@ struct Ball : public Circle {
     bool active{false};
     Ball(const float& x, const float& y);
     void update(const sf::Time& deltaTime);
-    void resize(const float& x, const float& y, const float& radius = BALL_RADIUS);
+    void resize(const float& x, const float& y, const float& width = WINDOW_WIDTH, const float& height= WINDOW_HEIGHT);
 };
 
 #endif // !BALL_HPP
