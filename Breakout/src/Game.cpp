@@ -7,6 +7,10 @@
 #include <ctime>
 #include <SFML/Graphics.hpp>
 
+auto randomInt = [] (unsigned int max) {
+    return (rand() % max);
+};
+
 auto randomBool = [] () {
     return (rand() % 2);
 };
@@ -21,12 +25,14 @@ Game::Game() :
 
     srand(static_cast<unsigned int>(time(0)));
 
-    // if (currentLevel-1)
-       // for (int x = currentLevel-1; x; x--) balls.emplace_back(Ball(WINDOW_WIDTH/2+(50*x), WINDOW_HEIGHT/2+(50*x)));
 
-    for (int c{0}; c < BLOCK_COLUMNS; ++c)
+    for (int c{0}, ballSpawned{2}; c < BLOCK_COLUMNS; ++c)
         for (int r{0}; r < BLOCK_ROWS; ++r)
-            blocks.emplace_back((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5));
+            if (ballSpawned) {
+                balls.emplace_back(Ball((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5)));
+                ballSpawned--;
+            }
+            else blocks.emplace_back((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5));
 }
 
 void Game::run() {
@@ -82,15 +88,13 @@ void Game::update(const sf::Time& deltaTime) {
     
     // game specific code
     paddle.update(deltaTime);
-    for (auto& ball : balls) 
-        if (ball.active) ball.update(deltaTime);
+    for (auto& ball : balls) ball.update(deltaTime);
 
     for (auto& ball : balls) 
-        testCollision(paddle, ball);
+        if (ball.active) testCollision(paddle, ball);
 
     for (auto& ball : balls)
-        if (!ball.active) continue;
-        else for (auto& block : blocks) testCollision(block, ball);
+        for (auto& block : blocks) testCollision(block, ball);
     
     blocks.erase(std::remove_if(blocks.begin(), blocks.end(), [] (const Block& block) {
         return block.destroyed;
