@@ -13,7 +13,7 @@ Ball::Ball(const float& x, const float& y) : active(false) {
 void Ball::update(const sf::Time& deltaTime) {
     shape.move(velocity*(deltaTime.asSeconds()));
 
-    if (!active && bottom() > (windowSize.y)) active = true;
+    if (!active && bottom() > (windowSize.y * .75f)) active = true;
 
     velocity.x = (left() < 0) ? BALL_VELOCITY : (right() > windowSize.x) ? -BALL_VELOCITY : velocity.x;
     velocity.y = (top() < 0) ? BALL_VELOCITY : (bottom() > windowSize.y) ? -BALL_VELOCITY : velocity.y;
