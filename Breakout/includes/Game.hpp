@@ -28,5 +28,8 @@ private:
     std::vector<Block> blocks;
     std::vector<Ball> balls;
     sf::Clock paddleTimer;
+    int currentLevel{1};
+    bool hasWon{false};
+    bool isOver{false};
 };
 #endif

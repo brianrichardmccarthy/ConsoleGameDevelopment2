@@ -16,7 +16,11 @@ void Ball::update(const sf::Time& deltaTime) {
     if (!active && bottom() > (windowSize.y * .75f)) active = true;
 
     velocity.x = (left() < 0) ? BALL_VELOCITY : (right() > windowSize.x) ? -BALL_VELOCITY : velocity.x;
-    velocity.y = (top() < 0) ? BALL_VELOCITY : (bottom() > windowSize.y) ? -BALL_VELOCITY : velocity.y;
+    
+    if ((bottom() > windowSize.y)) {
+        lives--;
+        velocity.y =-BALL_VELOCITY;
+    } else velocity.y = (top() < 0) ? BALL_VELOCITY : velocity.y;
 }
 
 void Ball::resize(const float& x, const float& y, const float& width, const float& height) {

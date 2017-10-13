@@ -34,7 +34,7 @@ void Game::init(int currentLevel, const sf::Vector2u& size) {
     switch (currentLevel) {
         case 2: {
                 // trapped ball
-                for (int r{randomInt(BLOCK_ROWS)}, ballSpawned{currentLevel}, c{randomInt(BLOCK_COLUMNS)}; r < BLOCK_ROWS; ++r)
+                for (int r{randomBool() ? 1 : 2}, ballSpawned{currentLevel}, c{randomInt(BLOCK_COLUMNS)}; r < BLOCK_ROWS; ++r)
                         if (ballSpawned) {
                             blocks.erase(blocks.begin() + (r*c));
                             balls.emplace_back(Ball((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5)));
@@ -53,14 +53,6 @@ void Game::init(int currentLevel, const sf::Vector2u& size) {
                     block.currentLives = 3;
                 }
             }
-        case 5: {
-                // Bonus and traps
-                break;
-            }
-        case 6: {
-                // Random Procedural Generation
-                break;
-            }
         default:
             break;
     }
@@ -69,11 +61,12 @@ void Game::init(int currentLevel, const sf::Vector2u& size) {
 void Game::run() {
     sf::Clock clock;
     
-    while (window.isOpen()) {
+    while (window.isOpen() && !isOver) {
         if (!processEvents()) break;
         update(clock.restart());
         render();
     }
+    std::cout << "Game over\n" << ((hasWon) ? "Congradualations I suppose." : "Haha, Sucker!") << std::endl;
 }
 
 
@@ -118,20 +111,25 @@ bool Game::processEvents() {
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)) init(2, window.getSize()); // trapped balls
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)) init(3, window.getSize()); // must destroy all blocks before time runs out
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num4)) init(4, window.getSize()); // blocks have multiple lives that regenerate over time
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num5)) init(5, window.getSize()); // Bonus and traps
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num6)) init(6, window.getSize()); // Random Procedural Generation
 
     return true;
 }
 
 void Game::update(const sf::Time& deltaTime) {
     
+    if (!blocks.size())
+        if (currentLevel == 4) hasWon = isOver = true;
+        else init(++currentLevel);
+    else if (!(balls.front().lives)) isOver = true;
+
+    if (isOver) return;
+
     // game specific code
     paddle.update(deltaTime);
     for (auto& ball : balls) ball.update(deltaTime);
 
     for (auto& ball : balls) 
-        if (ball.active) testCollision(paddle, ball);
+        testCollision(paddle, ball);
 
     for (auto& ball : balls)
         for (auto& block : blocks) testCollision(block, ball);
