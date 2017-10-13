@@ -25,7 +25,6 @@ bool isIntersecting(const T1& a, const T2& b) noexcept {
 
 bool isIntersecting(const sf::CircleShape& circle, const sf::RectangleShape& rectangle) noexcept;
 void testCollision(const Paddle& paddle, Ball& ball) noexcept ;
-void testCollision(Block& block, Ball& ball) noexcept ;
-void testCollision(Block& block1, Block& block2);
+void testCollision(Block& block, Ball& ball, int& score) noexcept ;
 
 #endif // !PHYSICS_HPP

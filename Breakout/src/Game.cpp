@@ -28,7 +28,7 @@ void Game::init(int currentLevel, const sf::Vector2u& size) {
     balls[0].active = true;
     paddle = Paddle((float) size.x/2, (float) size.y-50);
 
-    for (int c{0}, ballSpawned{(currentLevel == 2) ? currentLevel: 0}; c < BLOCK_COLUMNS; ++c)
+    for (int c{0}; c < BLOCK_COLUMNS; ++c)
         for (int r{0}; r < BLOCK_ROWS; ++r)
             blocks.emplace_back((c+1)*(BLOCK_WIDTH+3) +22, (r+2) * (BLOCK_HEIGHT+5));
     switch (currentLevel) {
@@ -67,6 +67,7 @@ void Game::run() {
         render();
     }
     std::cout << "Game over\n" << ((hasWon) ? "Congradualations I suppose." : "Haha, Sucker!") << std::endl;
+    std::cout << ((hasWon) ? "But you only scored " + std::to_string(score) + " can you do better?" : "Not only can you not beat a simple game but you also got a crap score of " + std::to_string(score))  << std::endl;
 }
 
 
@@ -132,7 +133,7 @@ void Game::update(const sf::Time& deltaTime) {
         testCollision(paddle, ball);
 
     for (auto& ball : balls)
-        for (auto& block : blocks) testCollision(block, ball);
+        for (auto& block : blocks) testCollision(block, ball, score);
     
     if (blocks.size())
         if (blocks.front().maxLives > 1)

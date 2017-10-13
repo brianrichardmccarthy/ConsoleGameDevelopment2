@@ -31,5 +31,6 @@ private:
     int currentLevel{1};
     bool hasWon{false};
     bool isOver{false};
+    int score{0};
 };
 #endif
