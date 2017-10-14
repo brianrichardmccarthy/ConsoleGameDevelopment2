@@ -24,7 +24,7 @@ auto randomBool = [] () {
 };
 
 Game::Game() :
-    window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),"Breakout"), paddle(WINDOW_WIDTH/2, WINDOW_HEIGHT-50) {
+    window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),"Blockout"), paddle(WINDOW_WIDTH/2, WINDOW_HEIGHT-50) {
     window.setFramerateLimit(60);
 
     // seed rand
