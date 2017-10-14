@@ -18,6 +18,6 @@
 
 # Advanced Enhancements
 
-	* Trapped balls that are not activated until released
-	* Variable screen size (but keep aspect fixed)
-	* Improve the ball-block collision
+	* Trapped balls that are not activated until released (done, but the blocks where the balls are being spawned are being removed and the balls just move up to top of the screen),
+	* Variable screen size (but keep aspect fixed) (done),
+	* Improve the ball-block collision (done but still slightly buggy, a noticable gap sometimes exisit).
