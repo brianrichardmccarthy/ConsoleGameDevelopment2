@@ -6,25 +6,22 @@
 #include "Block.hpp"
 #include <cmath>
 
-/*
-template<class T1, class T2>
-bool isIntersecting(const T1& a, const T2& b) noexcept {
-    
-    sf::Vector2f distance{fabsf(a.shape.getPosition().x - b.shape.getPosition().x), fabsf(a.shape.getPosition().y - b.shape.getPosition().y)};
-    
-    if (
-        (distance.x > (b.shape.getSize().x + a.shape.getRadius())) 
-         || (distance.y > (b.shape.getSize().y + a.shape.getRadius()))) return false;
+/**
 
-    if ((distance.x <= (b.getShape.getSize().x/2)) || (distance.y <= (b.getShape.getSize().y/2))) return true;
+	I removed the templated version of isIntersecting for two reasons:
+		1) When doing circle to block collision the function was large and I only put one or two line functions in header files.
+		2) I don't think there was any need for the templated functions as the ball is the only object that collides with either the block or paddle.
 
-    float disSqr = sqr(distance.x - b.getShape.getSize().x/2) + sqr(distance.y - b.getShape.getSize().y/2);
-    return disSqe <= (a.shape.getRadius()*a.shape.getRadius());
-}
+	isIntersecting function takes in a circle shape and rectangle shape and if they overlap (using circle to block collision) returns true else false. 
+	There is a bug of the ball not quite overlapping with the block or paddle in some cases.
+
+	testCollision is overloaded for the ball to block collision, and the ball to to paddle collision. 
+		If the ball collides with the paddle it bounces the ball back up.
+		If the ball collides with a block increase the score, change ball direction, and take away the blocks' live. 
+
 */
-
 bool isIntersecting(const sf::CircleShape& circle, const sf::RectangleShape& rectangle) noexcept;
-void testCollision(const Paddle& paddle, Ball& ball) noexcept ;
-void testCollision(Block& block, Ball& ball, int& score) noexcept ;
+void testCollision(const Paddle& paddle, Ball& ball) noexcept;
+void testCollision(Block& block, Ball& ball, int& score) noexcept;
 
 #endif // !PHYSICS_HPP
